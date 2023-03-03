@@ -46,7 +46,7 @@ func addBook(book models.Book) {
 		return
 	}
 
-	req, err := http.NewRequest("POST", "http://localhost:8000/books", bytes.NewBuffer(bookJson))
+	req, err := http.NewRequest("POST", "https://api-go2.onrender.com/books", bytes.NewBuffer(bookJson))
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -71,7 +71,7 @@ func addBook(book models.Book) {
 }
 
 func getBooks() {
-	resp, err := http.Get("http://localhost:8000/books")
+	resp, err := http.Get("https://api-go2.onrender.com/books")
 	if err != nil {
 		fmt.Println(err)
 		return
