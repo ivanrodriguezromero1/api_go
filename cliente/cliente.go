@@ -10,6 +10,8 @@ import (
 )
 
 func main() {
+	const apiKey = "my-secret-api-key"
+	const url = "https://api-go2.onrender.com/books"
 	bulk := flag.Bool("bulk", false, "Insertar datos por lotes")
 	insert := flag.Bool("insert", false, "Insertar nuevo dato")
 	show := flag.Bool("show", false, "Mostrar datos")
@@ -22,7 +24,7 @@ func main() {
 			{Title: "Cien años de soledad", Author: "Gabriel García Márquez"},
 		}
 		for _, book := range books {
-			addBook(book)
+			addBook(book, url, apiKey)
 		}
 	}
 	if *insert {
@@ -31,27 +33,27 @@ func main() {
 			Title:  "La sombra del viento",
 			Author: "Carlos Ruiz Zafón",
 		}
-		addBook(newBook)
+		addBook(newBook, url, apiKey)
 	}
 	if *show {
 		// Obtiene todos los libros
-		getBooks()
+		getBooks(url, apiKey)
 	}
 }
 
-func addBook(book models.Book) {
+func addBook(book models.Book, url, apiKey string) {
 	bookJson, err := json.Marshal(book)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	req, err := http.NewRequest("POST", "https://api-go2.onrender.com/books", bytes.NewBuffer(bookJson))
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(bookJson))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-
+	req.Header.Set("X-API-Key", apiKey)
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -70,8 +72,18 @@ func addBook(book models.Book) {
 	fmt.Printf("Se creó el libro: %+v\n", createdBook)
 }
 
-func getBooks() {
-	resp, err := http.Get("https://api-go2.onrender.com/books")
+func getBooks(url string, apiKey string) {
+	// Crea la solicitud HTTP
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	// Agrega el encabezado personalizado con la API key
+	req.Header.Set("X-API-Key", apiKey)
+
+	// Envía la solicitud HTTP y maneja la respuesta
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -84,7 +96,6 @@ func getBooks() {
 		fmt.Println(err)
 		return
 	}
-
 	fmt.Println("Libros:")
 	for _, book := range books {
 		fmt.Printf("- %+v\n", book)
