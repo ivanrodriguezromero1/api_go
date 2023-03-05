@@ -10,8 +10,6 @@ import (
 )
 
 func main() {
-	//Define apikey
-	const apiKey = "my-secret-api-key"
 	// Inicializa el enrutador
 	r := mux.NewRouter()
 	// Agrega algunas rutas de ejemplo

@@ -3,7 +3,6 @@ package handlers
 import (
 	"api_raz_mat/internal/models"
 	"encoding/json"
-	"errors"
 	"net/http"
 )
 
@@ -29,9 +28,9 @@ func AddBook(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(book)
 }
 func validateAPIKey(r *http.Request) error {
-	apiKey := r.Header.Get("X-API-Key")
-	if apiKey != "my-secret-api-key" {
-		return errors.New("API key missing or invalid")
-	}
+	// apiKey := r.Header.Get("X-API-Key")
+	// if apiKey != "my-secret-api-key" {
+	// 	return errors.New("API key missing or invalid")
+	// }
 	return nil
 }
