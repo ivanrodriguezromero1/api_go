@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -15,10 +16,14 @@ func main() {
 	// Agrega algunas rutas de ejemplo
 	r.HandleFunc("/books", handlers.GetBooks).Methods("GET")
 	r.HandleFunc("/books", handlers.AddBook).Methods("POST")
-
-	// Configura el servidor web
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders: []string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding", "Authorization"},
+	})
+	handler := c.Handler(r)
 	fmt.Println("Servidor iniciado")
-	if err := http.ListenAndServe(":8000", r); err != nil {
+	if err := http.ListenAndServe(":8000", handler); err != nil {
 		log.Fatal(err)
 	}
 }
