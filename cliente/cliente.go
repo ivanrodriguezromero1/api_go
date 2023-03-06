@@ -11,7 +11,7 @@ import (
 
 func main() {
 	const apiKey = "my-secret-api-key"
-	const url = "https://api-go2.onrender.com/books"
+	url := "https://api-go2.onrender.com/books"
 	bulk := flag.Bool("bulk", false, "Insertar datos por lotes")
 	insert := flag.Bool("insert", false, "Insertar nuevo dato")
 	show := flag.Bool("show", false, "Mostrar datos")
